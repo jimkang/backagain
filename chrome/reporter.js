@@ -38,9 +38,11 @@ function reportOnVisitItems(visitItems) {
     );
 
     // TODO: Set color with scale based on number of visits.
-    chrome.browserAction.setBadgeText({
-      text: lastDayVisitItems.length.toString()
-    });
+    // chrome.browserAction.setBadgeText({
+    //   text: lastDayVisitItems.length.toString()
+    // });
+
+    setIconToPngOfCount(lastDayVisitItems.length.toString());
   }
 };
 
@@ -50,6 +52,22 @@ function respondToTabActivation(activeInfo) {
     report();
   });
 };
+
+function setIconToPngOfCount(countString) {
+  var canvas = document.createElement('canvas');
+  document.body.appendChild(canvas);
+  canvas.width = 19;
+  canvas.height = 19;
+  var context = canvas.getContext('2d');
+  context.fillStyle = 'blue';
+  context.font = '16px sans-serif';
+  context.textBaseline = 'top';
+  context.fillText(countString, 0, 0);
+
+  chrome.browserAction.setIcon({
+    imageData: context.getImageData(0, 0, 19, 19)
+  });
+}
 
 Reporter.init = function init() {
   chrome.history.onVisited.addListener(respondToPageVisit);
