@@ -13,7 +13,7 @@
   ],
 
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["reporter.js", "background.js"],
     "persistent": false
   },
 
