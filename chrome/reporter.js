@@ -3,7 +3,8 @@
 function createReporter() {
 
 var Reporter = {
-  url: null
+  url: null,
+  colorDesignator: createColorDesignator(25, 130, 40, 80, 0.2, 1.0)
 };
 
 function respondToPageVisit(historyItem) {
@@ -21,12 +22,12 @@ function report() {
     },
     reportOnVisitItems);
   }
-};
+}
 
 function reportOnVisitItems(visitItems) {
   if (visitItems && visitItems.length) {
     var now = new Date();
-    var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     var startOfDayEpoch = startOfDay.getTime();
     var endOfDayEpoch = startOfDayEpoch + 24 * 60 * 60 * 1000 - 1;
 
@@ -37,35 +38,27 @@ function reportOnVisitItems(visitItems) {
       }
     );
 
-    // TODO: Set color with scale based on number of visits.
-    // chrome.browserAction.setBadgeText({
-    //   text: lastDayVisitItems.length.toString()
-    // });
+    var visits = lastDayVisitItems.length;
+    var designator = Reporter.colorDesignator;
 
-    setIconToPngOfCount(lastDayVisitItems.length.toString());
+    chrome.browserAction.setIcon({
+      imageData: makeIcon(visits.toString(),
+        (visits < 25) ? '#333' : '#fff', 
+        Reporter.colorDesignator.getHSLAForVisitCount(visits)
+      )
+    });
+
+    var readableURL = Reporter.url.split('//')[1];
+    chrome.browserAction.setTitle({
+      title: 'All-time visits to ' + readableURL + ': ' + visitItems.length
+    });    
   }
-};
+}
 
 function respondToTabActivation(activeInfo) {
   chrome.tabs.get(activeInfo.tabId, function gotTab(tab) {
     Reporter.url = tab.url;
     report();
-  });
-};
-
-function setIconToPngOfCount(countString) {
-  var canvas = document.createElement('canvas');
-  document.body.appendChild(canvas);
-  canvas.width = 19;
-  canvas.height = 19;
-  var context = canvas.getContext('2d');
-  context.fillStyle = 'blue';
-  context.font = '16px sans-serif';
-  context.textBaseline = 'top';
-  context.fillText(countString, 0, 0);
-
-  chrome.browserAction.setIcon({
-    imageData: context.getImageData(0, 0, 19, 19)
   });
 }
 
