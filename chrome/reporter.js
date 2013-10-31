@@ -4,7 +4,8 @@ function createReporter() {
 
 var Reporter = {
   url: null,
-  colorDesignator: createColorDesignator(25, 130, 40, 80, 0.2, 1.0)
+  colorDesignator: createColorDesignator(25, 130, 40, 80, 0.2, 1.0),
+  activeTabId: null
 };
 
 function respondToPageVisit(historyItem) {
@@ -45,26 +46,46 @@ function reportOnVisitItems(visitItems) {
       imageData: makeIcon(visits.toString(),
         (visits < 25) ? '#333' : '#fff', 
         Reporter.colorDesignator.getHSLAForVisitCount(visits)
-      )
+      ),
+      tabId: Reporter.activeTabId
     });
 
+    // TODO: Add today's visits to the popover as well.
     var readableURL = Reporter.url.split('//')[1];
     chrome.browserAction.setTitle({
-      title: 'All-time visits to ' + readableURL + ': ' + visitItems.length
+      title: 'All-time visits to ' + readableURL + ': ' + visitItems.length,
+      tabId: Reporter.activeTabId
     });    
   }
 }
 
+function reportOnTab(tab) {
+  Reporter.url = tab.url;
+  report();
+}
+
 function respondToTabActivation(activeInfo) {
-  chrome.tabs.get(activeInfo.tabId, function gotTab(tab) {
-    Reporter.url = tab.url;
-    report();
+  Reporter.activeTabId = activeInfo.tabId;
+  chrome.tabs.get(activeInfo.tabId, reportOnTab);
+}
+
+function respondToWindowFocus(windowId) {
+  chrome.windows.get(windowId, {populate: true}, function gotWindow(window) {
+    for (var i = 0; i < window.tabs.length; ++i) {
+      var tab = window.tabs[i];
+      if (tab.active) {
+        Reporter.activeTabId = tab.id;
+        reportOnTab(tab);
+        break;
+      }
+    }
   });
 }
 
 Reporter.init = function init() {
   chrome.history.onVisited.addListener(respondToPageVisit);
   chrome.tabs.onActivated.addListener(respondToTabActivation);
+  chrome.windows.onFocusChanged.addListener(respondToWindowFocus);
 };
 
 return Reporter;
