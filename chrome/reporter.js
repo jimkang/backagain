@@ -50,10 +50,8 @@ function reportOnVisitItems(visitItems) {
       tabId: Reporter.activeTabId
     });
 
-    // TODO: Add today's visits to the popover as well.
-    var readableURL = Reporter.url.split('//')[1];
     chrome.browserAction.setTitle({
-      title: 'All-time visits to ' + readableURL + ': ' + visitItems.length,
+      title: visits + ' visits today; ' + visitItems.length + ' all-time visits.',
       tabId: Reporter.activeTabId
     });    
   }
