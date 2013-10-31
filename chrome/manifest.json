@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Back Again?",
-  "description": "Notes how many times you've visited the web page you're on this day.",
+  "description": "Shows the number of times you've visited a web site in a day.",
   "version": "1.0.0",
 
   "permissions": [
@@ -24,15 +24,15 @@
 
   "browser_action": {
     "default_icon": {
-      "19": "onebyone_icon_19.png",
-      "38": "onebyone_icon_38.png"
+      "19": "backagain_icon_19.png",
+      "38": "backagain_icon_38.png"
     }
   },
 
   "icons": {
-    "16": "onebyone_icon_16.png",
-    "48": "onebyone_icon_48.png",
-    "128": "onebyone_icon_128.png"
+    "16": "backagain_icon_16.png",
+    "48": "backagain_icon_48.png",
+    "128": "backagain_icon_128.png"
   }
 }
 
