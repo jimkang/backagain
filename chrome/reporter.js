@@ -5,12 +5,19 @@ function createReporter() {
 var Reporter = {
   url: null,
   colorDesignator: createColorDesignator(25, 130, 40, 80, 0.2, 1.0),
-  activeTabId: null
+  activeTabId: null,
+  filter: createHistoryFilter()
 };
 
+function changeURL(url) {
+  if (url && url.indexOf('chrome-') !== 0) {
+    Reporter.url = url;
+    report();    
+  }  
+}
+
 function respondToPageVisit(historyItem) {
-  Reporter.url = historyItem.url;
-  report();
+  changeURL(historyItem.url);
 }
 
 function report() {
@@ -26,44 +33,36 @@ function report() {
 }
 
 function reportOnVisitItems(visitItems) {
-  if (visitItems && visitItems.length) {
-    var now = new Date();
-    var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    var startOfDayEpoch = startOfDay.getTime();
-    var endOfDayEpoch = startOfDayEpoch + 24 * 60 * 60 * 1000 - 1;
+  var lastDayVisitItems = Reporter.filter.visitsInLastNDays(visitItems, 1);
+  var visits = lastDayVisitItems.length;
+  var designator = Reporter.colorDesignator;
 
-    var lastDayVisitItems = visitItems.filter(
-      function isInLastDay(item) {
-        return (item.visitTime >= startOfDayEpoch &&
-          item.visitTime < endOfDayEpoch);
-      }
-    );
-
-    var visits = lastDayVisitItems.length;
-    var designator = Reporter.colorDesignator;
-
-    chrome.browserAction.setIcon({
-      imageData: makeIcon(visits.toString(),
-        (visits < 25) ? '#333' : '#fff', 
-        Reporter.colorDesignator.getHSLAForVisitCount(visits)
-      ),
-      tabId: Reporter.activeTabId
-    });
-
-    chrome.browserAction.setTitle({
-      title: visits + ' visits today; ' + visitItems.length + ' all-time visits.',
-      tabId: Reporter.activeTabId
-    });    
+  if (!Reporter.activeTabId) {
+    debugger;
   }
+  chrome.browserAction.setIcon({
+    imageData: makeIcon(visits.toString(),
+      (visits < 25) ? '#333' : '#fff', 
+      Reporter.colorDesignator.getHSLAForVisitCount(visits)
+    ),
+    tabId: Reporter.activeTabId
+  });
+
+  chrome.browserAction.setTitle({
+    title: visits + ' visits today; ' + visitItems.length + ' all-time visits.',
+    tabId: Reporter.activeTabId
+  });
 }
 
 function reportOnTab(tab) {
-  Reporter.url = tab.url;
-  report();
+  changeURL(tab.url);
 }
 
 function respondToTabActivation(activeInfo) {
   Reporter.activeTabId = activeInfo.tabId;
+  if (!activeInfo.tabId) {
+    console.log('activeInfo.tabId', activeInfo.tabId);
+  }
   chrome.tabs.get(activeInfo.tabId, reportOnTab);
 }
 

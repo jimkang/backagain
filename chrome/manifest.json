@@ -16,7 +16,11 @@
     "scripts": [
       "makeicon.js", 
       "colordesignator.js", 
-      "reporter.js", 
+      "underscore.js",
+      "historyfilter.js",
+      "d3.v3.min.js",
+      "reporter.js",
+      "graph.js",
       "background.js"
     ],
     "persistent": false
