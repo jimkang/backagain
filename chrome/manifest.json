@@ -14,13 +14,14 @@
 
   "background": {
     "scripts": [
-      "makeicon.js", 
-      "colordesignator.js", 
       "underscore.js",
-      "historyfilter.js",
       "d3.v3.min.js",
+      "makeicon.js",
+      "colordesignator.js",
+      "historyfilter.js",
       "reporter.js",
       "graph.js",
+      "popupreporter.js",
       "background.js"
     ],
     "persistent": false
@@ -30,7 +31,8 @@
     "default_icon": {
       "19": "backagain_icon_19.png",
       "38": "backagain_icon_38.png"
-    }
+    },
+    "default_popup": "graphs.html"
   },
 
   "icons": {
