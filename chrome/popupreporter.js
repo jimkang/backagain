@@ -38,10 +38,34 @@ function graphLastWeekVisitItems(visitItems) {
     };
   });
 
-  console.log(dailyVisits);
+  var sevenDaysOfVisits = padDayVisitArrayForSpan(dailyVisits, 7);
 
-  this.graph.render(document.body, 'weekGraph', dailyVisits);
+  console.log(sevenDaysOfVisits);
+
+  this.graph.render(document.body, 'weekGraph', sevenDaysOfVisits);
 };
+
+function padDayVisitArrayForSpan(
+  dailyVisits, spanInDays) {
+
+  var paddedArray = [];
+  var today = new Date();
+
+  for (var i = 0; i < spanInDays; ++i) {
+    var date = new Date(today.getFullYear(), today.getMonth(), 
+      today.getDate() - i);
+    var existingEntries = dailyVisits.filter(function matchDate(entry) {
+      return (entry.date.getTime() === date.getTime());
+    });
+    if (existingEntries.length === 1) {
+      paddedArray[i] =  existingEntries[0];
+    }
+    else {
+      paddedArray[i] = {date: date, visitCount: 0};
+    }
+  }
+  return paddedArray;
+}
 
 return PopupReporter;
 }
