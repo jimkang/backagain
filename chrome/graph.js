@@ -2,7 +2,8 @@ function createGraph() {
   
 var graph = {
   height: 400,
-  width: 400
+  width: 400,
+  colorDesignator: createColorDesignator(25, 130, 40, 80, 1.0, 1.0)  
 };
 
 graph.setUpContainers = function setUpContainers(bodyEl, targetSvgId) {
@@ -48,7 +49,11 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
     x: 0,
     height: function getHeight(d, i) {
       return yScale.rangeBand();
+    },
+    fill: function getColor(d) {
+      return this.colorDesignator.getHSLAForVisitCount(d.visitCount);
     }
+    .bind(this)
   });
 
   visitBars.attr('width', function getWidth(d, i) {
