@@ -5,7 +5,7 @@ var graph = {
   width: 400,
   paddingLeft: 50,
   paddingRight: 20,
-  colorDesignator: createColorDesignator(25, 130, 40, 80, 0.5, 1.0)  
+  colorDesignator: createColorDesignator(35, 130, 40, 80, 0.5, 1.0)  
 };
 
 graph.setUpContainers = function setUpContainers(bodyEl, targetSvgId) {
