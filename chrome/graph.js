@@ -61,6 +61,22 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
   });
 
   visitBars.exit().remove();
+
+  var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .tickSize(0)
+    // .tickPadding(6)
+    .orient('left')
+    .tickFormat(d3.time.format('%a'))
+    .tickValues(_.pluck(dailyVisits, 'date'));
+
+  var axisGroup = graphContent.select('.y.axis');
+  if (axisGroup.empty()) {
+    axisGroup = graphContent.append('g').attr('class', 'y axis')
+    .attr('transform', 'translate(80, 0)');
+    axisGroup.call(yAxis);
+  }
+
 };
 
 
