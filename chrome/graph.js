@@ -38,7 +38,7 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
 
   var yScale = d3.scale.ordinal()
     .domain(d3.range(dailyVisits.length))
-    .rangeRoundBands([0, this.height], 0.08);
+    .rangeRoundBands([0, this.height], 0.2);
 
   var visitBars = graphContent.selectAll('.visit-bar').data(dailyVisits, 
     identifyByDate);
@@ -71,13 +71,13 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
     class: 'visit-label',
     x: this.paddingLeft,
     y: function getLabelY(d, i) {
-      return yScale(i) + yScale.rangeBand()/2;
+      return yScale(i) + yScale.rangeBand()/2 - 2;
     }
   });
 
   // Update.
   visitLabels.attr('x', function getLabelX(d) {
-    return xScale(d.visitCount) + this.paddingLeft + 4;
+    return xScale(d.visitCount) + this.paddingLeft + 6;
   }
   .bind(this))
   .text(function getText(d) {
