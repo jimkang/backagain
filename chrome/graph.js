@@ -54,7 +54,7 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
 
   var yScale = d3.scale.ordinal()
     .domain(d3.range(dailyVisits.length))
-    .rangeRoundBands([0, this.height - this.titleHeight], 0.2);
+    .rangeRoundBands([0, this.height - this.titleHeight], 0.22);
 
   var visitBars = graphContent.selectAll('.visit-bar').data(dailyVisits, 
     identifyByDate);
