@@ -1,0 +1,15 @@
+body {
+  font-family: 'Helvetica Neue';
+  background-color: #eee;
+
+  color: #404044;
+  
+  margin: 0;
+  height: 100%;
+}
+
+.tick {
+  font-weight: bold;
+  fill: #444;
+}
+
