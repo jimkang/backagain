@@ -49,17 +49,20 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
       return yScale(i);
     },
     x: this.paddingLeft,
+    width: 0,
     height: yScale.rangeBand(),
-    fill: function getColor(d) {
-      return this.colorDesignator.getHSLAForVisitCount(d.visitCount);
-    }
-    .bind(this)
+    fill: 'hsla(36, 0, 100, 0.5)'
   });
 
   // Update.
   visitBars.attr('width', function getWidth(d, i) {
     return xScale(d.visitCount);
   });
+  visitBars.transition().duration(800).ease('quad')
+    .attr('fill', function getColor(d) {
+      return this.colorDesignator.getHSLAForVisitCount(d.visitCount);
+    }
+    .bind(this));
 
   visitBars.exit().remove();
 
@@ -69,20 +72,22 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
 
   visitLabels.enter().append('text').attr({
     class: 'visit-label',
-    x: this.paddingLeft,
+    x: function getLabelX(d) {
+      return xScale(d.visitCount) + this.paddingLeft + 6;
+    }
+    .bind(this),
     y: function getLabelY(d, i) {
       return yScale(i) + yScale.rangeBand()/2 - 2;
-    }
+    },
+    'fill-opacity': 0
   });
 
   // Update.
-  visitLabels.attr('x', function getLabelX(d) {
-    return xScale(d.visitCount) + this.paddingLeft + 6;
-  }
-  .bind(this))
-  .text(function getText(d) {
+  visitLabels.text(function getText(d) {
     return d.visitCount ? d.visitCount : '';
   });
+  visitLabels.transition().delay(250).duration(250).ease('exp')
+    .attr('fill-opacity', 1);
 
   visitLabels.exit().remove();
 
