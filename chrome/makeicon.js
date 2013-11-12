@@ -22,7 +22,7 @@ function makeIcon(text, textColor, bgStyle) {
       if (fontSize > 9) {
         fontString = 'bold ';
       }
-      fontString += fontSize + 'px sans-serif';
+      fontString += fontSize + 'px futura';
       
       context.font = fontString;
       metrics = context.measureText(text);

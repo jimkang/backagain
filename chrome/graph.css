@@ -1,5 +1,5 @@
 body {
-  font-family: 'Helvetica Neue';
+  font-family: futura, 'Helvetica Neue', sans-serif;
   background-color: #eee;
 
   color: #404044;
@@ -9,13 +9,20 @@ body {
 }
 
 .tick {
-  font-weight: bold;
-  fill: #777;
+  fill: #787878;
+  text-transform: uppercase;
 }
 
 .visit-label {
+  font-family: futura, 'Helvetica Neue', sans-serif;
   font-weight: bold;
   fill: #585858;
-  font-size: 24px;
+  font-size: 28px;
   alignment-baseline: central;
+}
+
+.graph-title {
+  fill: #777;
+  text-anchor: middle;
+  alignment-baseline: central;  
 }

@@ -2,7 +2,7 @@ function createPopupReporter(url) {
 
 var PopupReporter = {
   url: url,
-  graph: createGraph(),
+  graph: null,
   filter: createHistoryFilter()
 };
 
@@ -40,9 +40,22 @@ function graphLastWeekVisitItems(visitItems) {
 
   var sevenDaysOfVisits = padDayVisitArrayForSpan(dailyVisits, 7);
 
-  console.log(sevenDaysOfVisits);
-
+  // console.log(sevenDaysOfVisits);
+  this.graph = createGraph('Visits to ' + this.getReadableURL() + ' this week.');
   this.graph.render(document.body, 'weekGraph', sevenDaysOfVisits);
+};
+
+PopupReporter.getReadableURL = function getReadableURL() {
+  var readable = this.url;
+  var pieces = this.url.split('//');
+  if (pieces.length > 1) {
+    readable = pieces[1];
+    if (readable.substr(-1) === '/') {
+      readable = readable.substr(0, readable.length - 1);
+    }
+  }
+
+  return readable;
 };
 
 function padDayVisitArrayForSpan(
