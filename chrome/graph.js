@@ -36,19 +36,18 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
     })])
     .range([0, this.width]);
 
-  console.log('this.height', this.height);
   var yScale = d3.scale.ordinal()
     .domain(d3.range(dailyVisits.length))
-    .rangeRoundBands([0, this.height]);
+    .rangeRoundBands([0, this.height], 0.08);
 
   var visitBars = graphContent.selectAll('.visit-bar').data(dailyVisits);
-  // debugger;
+
   visitBars.enter().append('rect').attr({
     class: 'visit-bar',
     y: function getY(d, i) {
       return yScale(i);
     },
-    x: 0,
+    x: this.paddingLeft,
     height: function getHeight(d, i) {
       return yScale.rangeBand();
     },
