@@ -10,6 +10,12 @@ body {
 
 .tick {
   font-weight: bold;
-  fill: #444;
+  fill: #666;
 }
 
+.visit-label {
+  font-weight: bold;
+  fill: #585858;
+  font-size: 24px;
+  alignment-baseline: central;
+}
