@@ -7,7 +7,7 @@ var graph = {
   paddingRight: 50,
   titleText: titleText,
   titleHeight: 40,
-  colorDesignator: createColorDesignator(36, 130, 40, 80, 0.5, 1.0)
+  colorDesignator: createColorDesignator(36, 220, 40, 80, 0.5, 1.0)
 };
 
 graph.setUpContainers = function setUpContainers(bodyEl, targetSvgId) {
