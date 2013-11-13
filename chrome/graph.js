@@ -12,6 +12,10 @@ var graph = {
 
 graph.setUpContainers = function setUpContainers(bodyEl, targetSvgId) {
   var body = d3.select(bodyEl);
+  body.on('click', function closePopup() {
+    window.close();
+  });
+
   var svg = body.select('#' + targetSvgId);
   if (svg.empty()) {      
     svg = body.append('svg').attr({
