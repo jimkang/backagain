@@ -2,9 +2,9 @@ function createGraph(titleText) {
   
 var graph = {
   height: 440,
-  width: 400,
+  width: 450,
   paddingLeft: 60,
-  paddingRight: 50,
+  paddingRight: 0,
   titleText: titleText,
   titleHeight: 40,
   titleLineHeight: 20,
@@ -64,11 +64,12 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
   var graphContent = this.setUpContainers(bodyEl, targetSvgId);
   this.setUpTitle(graphContent);
 
+  var visitLabelWidthGuess = guessAtMaxLabelWidth(dailyVisits);
   var xScale = d3.scale.linear()
     .domain([0, d3.max(dailyVisits, function getCount(d) {
       return d.visitCount;
     })])
-    .range([0, this.width]);
+    .range([0, this.width - visitLabelWidthGuess]);
 
   var yScale = d3.scale.ordinal()
     .domain(d3.range(dailyVisits.length))
@@ -144,6 +145,27 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
 
 function identifyByDate(d) {
   return d.date;
+}
+
+function guessAtMaxLabelWidth(dailyVisits) {
+  var mostVisited = _.max(dailyVisits, 
+    function getCount(d) { return d.visitCount; });
+  var digitCount = mostVisited.visitCount.toString().length;
+  var visitLabelWidthGuess = 23 * digitCount;
+  switch (digitCount) {
+    case 1:    
+      visitLabelWidthGuess = 33;
+      break;
+    case 2: 
+      visitLabelWidthGuess = 50;
+      break;
+    case 3:
+      visitLabelWidthGuess = 66;
+      break;
+    default:
+      visitLabelWidthGuess = 22 * digitCount;
+  }
+  return visitLabelWidthGuess;
 }
 
 return graph;
