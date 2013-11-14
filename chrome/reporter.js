@@ -37,20 +37,52 @@ function reportOnVisitItems(visitItems) {
   var visits = lastDayVisitItems.length;
   var designator = Reporter.colorDesignator;
 
-  if (!Reporter.activeTabId) {
-    debugger;
+  if (Reporter.activeTabId !== null && Reporter.activeTabId !== undefined) {
+    updateUI(visits, visitItems.length, Reporter.activeTabId);
   }
+  else {
+    // alert('Tab id missing:' + Reporter.activeTabId);
+
+    var attemptCompleted = 0;
+    var intervalHandle = setInterval(function getActiveTabId() {
+      chrome.tabs.query({
+        active: true,
+        currentWindow: true
+      },
+      function (tabArray) {
+        ++attemptCompleted;
+          // alert('Attempt ' + attemptCompleted);
+
+        if (tabArray.length > 0 && tabArray[0].id !== null && 
+            tabArray[0].id !== undefined) {
+
+          Reporter.activeTabId = tabArray[0].id;
+          // alert('found: ' + Reporter.activeTabId);
+
+          clearInterval(intervalHandle);
+          updateUI(visits, visitItems.length, Reporter.activeTabId);
+        }
+        if (attemptCompleted > 2) {
+          clearInterval(intervalHandle);
+        }
+      });
+    },
+    500);
+  }
+}
+
+function updateUI(visits, alltimeVisits, tabId) {
   chrome.browserAction.setIcon({
     imageData: makeIcon(visits.toString(),
       (visits < 25) ? '#333' : '#fff', 
       Reporter.colorDesignator.getHSLAForVisitCount(visits)
     ),
-    tabId: Reporter.activeTabId
+    tabId: tabId
   });
 
   chrome.browserAction.setTitle({
-    title: visits + ' visits today; ' + visitItems.length + ' all-time visits.',
-    tabId: Reporter.activeTabId
+    title: visits + ' visits today; ' + alltimeVisits + ' all-time visits.',
+    tabId: tabId
   });
 }
 
