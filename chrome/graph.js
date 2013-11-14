@@ -7,6 +7,8 @@ var graph = {
   paddingRight: 50,
   titleText: titleText,
   titleHeight: 40,
+  titleLineHeight: 20,
+  maxTitleLineLength: 60,
   colorDesignator: createColorDesignator(36, 220, 40, 80, 0.5, 1.0)
 };
 
@@ -34,14 +36,26 @@ graph.setUpContainers = function setUpContainers(bodyEl, targetSvgId) {
 graph.setUpTitle = function setUpTitle(graphContent) {
   var title = graphContent.select('.graph-title');
   if (title.empty()) {
-    title = graphContent.append('text').classed('graph-title', true);
+    title = graphContent.append('g').classed('graph-title', true);
   }
 
-  title.attr({
-    x: (this.width + this.paddingLeft + this.paddingRight)/2,
-    y: this.height - this.titleHeight/2
-  })
-  .text(titleText);
+  var x = (this.width + this.paddingLeft + this.paddingRight)/2;
+  var y = this.height - this.titleHeight;
+  title.attr('transform', 'translate(' + x + ', ' + y + ')');
+
+  var linesOfText = breakLineUp(this.titleText, this.maxTitleLineLength);
+  var lines = title.selectAll('text').data(linesOfText);
+  lines.enter().append('text');
+  lines.text(function echoText(d) { return d; })
+  .attr('y', function getY(d, i) {
+    if (linesOfText.length === 1) {
+      return this.titleLineHeight * 0.666;
+    }
+    else {
+      return i * this.titleLineHeight;
+    }
+  }
+  .bind(this));
 };
 
 // dailyVisits should be an array of objects, each with a date and a 

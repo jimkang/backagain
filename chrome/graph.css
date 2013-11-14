@@ -21,7 +21,7 @@ body {
   alignment-baseline: central;
 }
 
-.graph-title {
+.graph-title text {
   font-size: 14px;
   font-weight: 300;
   fill: #777;
