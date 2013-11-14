@@ -93,7 +93,7 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
   visitBars.attr('width', function getWidth(d, i) {
     return xScale(d.visitCount);
   });
-  visitBars.transition().duration(800).ease('quad')
+  visitBars.transition().duration(250).ease('quad')
     .attr('fill', function getColor(d) {
       return this.colorDesignator.getHSLAForVisitCount(d.visitCount);
     }
