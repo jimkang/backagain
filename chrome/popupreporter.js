@@ -83,7 +83,6 @@ function padDayVisitArrayForSpan(
 return PopupReporter;
 }
 
-debugger;
 var bg = chrome.extension.getBackgroundPage();
 var popupReporter = createPopupReporter(bg.reporter.url);
 popupReporter.reportLastWeek();
