@@ -14,6 +14,7 @@ function makeIcon(text, textColor, bgStyle) {
     context.fillStyle = textColor;
     context.textAlign = 'center';
     context.textBaseline = 'middle';
+
     var fontSize = 18;
 
     do {
@@ -22,7 +23,7 @@ function makeIcon(text, textColor, bgStyle) {
       if (fontSize > 9) {
         fontString = 'bold ';
       }
-      fontString += fontSize + 'px futura';
+      fontString += fontSize + 'px futura,sans-serif';
       
       context.font = fontString;
       metrics = context.measureText(text);
