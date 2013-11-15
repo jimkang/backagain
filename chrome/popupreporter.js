@@ -63,13 +63,14 @@ function padDayVisitArrayForSpan(
 
   var paddedArray = [];
   var today = new Date();
+  function matchDate(entry) {
+    return (entry.date.getTime() === date.getTime());
+  }
 
   for (var i = 0; i < spanInDays; ++i) {
     var date = new Date(today.getFullYear(), today.getMonth(), 
       today.getDate() - i);
-    var existingEntries = dailyVisits.filter(function matchDate(entry) {
-      return (entry.date.getTime() === date.getTime());
-    });
+    var existingEntries = dailyVisits.filter(matchDate);
     if (existingEntries.length === 1) {
       paddedArray[i] =  existingEntries[0];
     }
