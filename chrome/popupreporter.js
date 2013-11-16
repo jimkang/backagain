@@ -84,7 +84,18 @@ function padDayVisitArrayForSpan(
 return PopupReporter;
 }
 
-var bg = chrome.extension.getBackgroundPage();
-var popupReporter = createPopupReporter(bg.reporter.url);
-popupReporter.reportLastWeek();
+// Run the background page fetch on the next tick.
+// This hoodoo reduces the incidences of bg being null, which causes the blank 
+// popup bug to happen.
+setTimeout(function doReport() {
+  var bg = chrome.extension.getBackgroundPage();
+  if (!bg) {
+    // alert('Couldn\'t get backgroundPage!');
+  }
+  else {
+    var popupReporter = createPopupReporter(bg.reporter.url);
+    popupReporter.reportLastWeek();
+  }
+},
+0);
 
