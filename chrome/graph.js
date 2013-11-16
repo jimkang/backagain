@@ -3,20 +3,22 @@ function createGraph(titleText) {
 var graph = {
   height: 440,
   width: 450,
-  paddingLeft: 60,
+  leftLabelWidth: 60,
+  paddingLeft: 44,
   paddingRight: 0,
   titleText: titleText,
   titleHeight: 40,
   titleLineHeight: 20,
   maxTitleLineLength: 60,
-  colorDesignator: createColorDesignator(36, 220, 40, 80, 0.5, 1.0)
+  colorDesignator: createColorDesignator(36, 220, 40, 80, 0.5, 1.0),
+  scopeSlider: null
 };
 
 graph.setUpContainers = function setUpContainers(bodyEl, targetSvgId) {
   var body = d3.select(bodyEl);
-  body.on('click', function closePopup() {
-    window.close();
-  });
+  // body.on('click', function closePopup() {
+  //   window.close();
+  // });
 
   var svg = body.select('#' + targetSvgId);
   if (svg.empty()) {      
@@ -26,10 +28,23 @@ graph.setUpContainers = function setUpContainers(bodyEl, targetSvgId) {
       height: this.height
     });
   }
+
   var graphContent = svg.select('#graphContent');
   if (graphContent.empty()) {
     graphContent = svg.append('g').attr('id', 'graphContent');
+    graphContent.attr('transform', 'translate(' + this.paddingLeft + ', 0)');
   }
+
+  this.scopeSlider = createScopeSlider({
+    svg: svg,
+    orientation: 'vertical',
+    thickness: 44,
+    maxLength: this.height,
+    x: 0,
+    y: 0
+  });
+  this.scopeSlider.setUpElements();
+
   return graphContent;
 };
 
@@ -39,7 +54,7 @@ graph.setUpTitle = function setUpTitle(graphContent) {
     title = graphContent.append('g').classed('graph-title', true);
   }
 
-  var x = (this.width + this.paddingLeft + this.paddingRight)/2;
+  var x = (this.width + this.leftLabelWidth + this.paddingRight)/2;
   var y = this.height - this.titleHeight;
   title.attr('transform', 'translate(' + x + ', ' + y + ')');
 
@@ -57,6 +72,7 @@ graph.setUpTitle = function setUpTitle(graphContent) {
   }
   .bind(this));
 };
+
 
 // dailyVisits should be an array of objects, each with a date and a 
 // visitCount.
@@ -83,7 +99,7 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
     y: function getY(d, i) {
       return yScale(i);
     },
-    x: this.paddingLeft,
+    x: this.leftLabelWidth,
     width: 0,
     height: yScale.rangeBand(),
     fill: 'hsla(36, 0, 100, 0.5)'
@@ -108,7 +124,7 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
   visitLabels.enter().append('text').attr({
     class: 'visit-label',
     x: function getLabelX(d) {
-      return xScale(d.visitCount) + this.paddingLeft + 6;
+      return xScale(d.visitCount) + this.leftLabelWidth + 6;
     }
     .bind(this),
     y: function getLabelY(d, i) {
@@ -137,7 +153,7 @@ graph.render = function render(bodyEl, targetSvgId, dailyVisits) {
   var axisGroup = graphContent.select('.y.axis');
   if (axisGroup.empty()) {
     axisGroup = graphContent.append('g').attr('class', 'y axis')
-    .attr('transform', 'translate(' + (this.paddingLeft - 5) + ', 0)');
+    .attr('transform', 'translate(' + (this.leftLabelWidth - 5) + ', 0)');
     axisGroup.call(yAxis);
   }
 
