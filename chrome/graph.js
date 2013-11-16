@@ -39,7 +39,7 @@ graph.setUpContainers = function setUpContainers(bodyEl, targetSvgId) {
     svg: svg,
     orientation: 'vertical',
     thickness: 44,
-    maxLength: this.height,
+    lengthToScopeScale: d3.scale.linear().domain([0, this.height]).range([0, 100]),
     x: 0,
     y: 0
   });

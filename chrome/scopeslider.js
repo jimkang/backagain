@@ -2,7 +2,7 @@
 // svg (d3 selection)
 // orientation ('horizontal' or 'vertical')
 // thickness
-// maxLength
+// lengthToScopeScale
 // x
 // y
 
@@ -25,10 +25,12 @@ scopeSlider.setUpElements = function setUpElements() {
     this.slider = this.svg.append('g').classed('scope-slider', true);
     this.slider.attr('transform', 'translate(' + this.x + ', ' + this.y + ')');
 
+    var maxInput = d3.max(this.lengthToScopeScale.domain());
+
     this.slider.append('rect').classed('slider-backing', true)
     .attr({
-      width: (this.orientation === 'vertical') ? this.thickness : this.maxLength,
-      height: (this.orientation === 'vertical') ? this.maxLength : this.thickness,
+      width: (this.orientation === 'vertical') ? this.thickness : maxInput,
+      height: (this.orientation === 'vertical') ? maxInput : this.thickness,
       fill: 'blue',
       x: 0,
       y: 0
