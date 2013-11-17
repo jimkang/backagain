@@ -37,11 +37,15 @@ graph.setUpContainers = function setUpContainers(bodyEl, targetSvgId) {
 
   this.scopeSlider = createScopeSlider({
     svg: svg,
-    orientation: 'vertical',
+    isVertical: true,
     thickness: 44,
-    lengthToScopeScale: d3.scale.linear().domain([0, this.height]).range([0, 100]),
+    // lengthToScopeScale: d3.scale.linear().domain([0, this.height]).range([0, 100]),
+    minLength: 88,
+    maxLength: this.height,
     x: 0,
-    y: 0
+    y: 0,
+    barStart: 0,
+    barEnd: 100
   });
   this.scopeSlider.setUpElements();
 
