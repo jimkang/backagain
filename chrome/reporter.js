@@ -105,12 +105,14 @@ function respondToTabActivation(activeInfo) {
 
 function respondToWindowFocus(windowId) {
   chrome.windows.get(windowId, {populate: true}, function gotWindow(window) {
-    for (var i = 0; i < window.tabs.length; ++i) {
-      var tab = window.tabs[i];
-      if (tab.active) {
-        Reporter.activeTabId = tab.id;
-        reportOnTab(tab);
-        break;
+    if (window) {
+      for (var i = 0; i < window.tabs.length; ++i) {
+        var tab = window.tabs[i];
+        if (tab.active) {
+          Reporter.activeTabId = tab.id;
+          reportOnTab(tab);
+          break;
+        }
       }
     }
   });
