@@ -89,10 +89,7 @@ return PopupReporter;
 // popup bug to happen.
 setTimeout(function doReport() {
   var bg = chrome.extension.getBackgroundPage();
-  if (!bg) {
-    // alert('Couldn\'t get backgroundPage!');
-  }
-  else {
+  if (bg && bg.reporter && bg.reporter.url) {
     var popupReporter = createPopupReporter(bg.reporter.url);
     popupReporter.reportLastWeek();
   }
