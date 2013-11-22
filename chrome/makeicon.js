@@ -52,5 +52,12 @@ function makeIcon(text, textColor, bgStyle) {
     context.fill();
   }
 
-  return context.getImageData(0, 0, 19, 19);
+  var imageData = context.getImageData(0, 0, 19, 19);
+
+  setTimeout(function removeCanvas() {
+    document.body.removeChild(canvas);
+  },
+  0);
+  
+  return imageData;
 }
