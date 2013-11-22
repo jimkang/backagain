@@ -11,7 +11,6 @@ var Reporter = {
 
 function changeURL(url) {
   if (url && url.indexOf('chrome-') !== 0) {
-
     // Before changing the URL, it must be checked against the active tab. 
     // Autorefreshing pages will trigger an onVisited event without being the 
     // active tab.
