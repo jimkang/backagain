@@ -11,8 +11,40 @@ var Reporter = {
 
 function changeURL(url) {
   if (url && url.indexOf('chrome-') !== 0) {
-    Reporter.url = url;
-    report();    
+
+    // Before changing the URL, it must be checked against the active tab. 
+    // Autorefreshing pages will trigger an onVisited event without being the 
+    // active tab.
+    var attemptsToGetActiveTab = 0;
+    var intervalHandle = setInterval(function getActiveTabId() {
+      chrome.tabs.query({
+        active: true,
+        currentWindow: true
+      },
+      function useQueryResults(tabArray) {
+        ++attemptsToGetActiveTab;
+
+        if (tabArray.length > 0 && tabArray[0].id !== null && 
+            tabArray[0].id !== undefined) {
+
+          clearInterval(intervalHandle);
+          var activeTab = tabArray[0];
+          Reporter.activeTabId = activeTab.id;
+
+          if (activeTab.url === url) {
+            Reporter.url = url;
+            report();            
+          }
+          else {
+            // console.log('URL mismatch:', activeTab.url, url);
+          }
+        }
+        if (attemptsToGetActiveTab > 2) {
+          clearInterval(intervalHandle);
+        }
+      });
+    },
+    500);
   }  
 }
 
@@ -41,33 +73,7 @@ function reportOnVisitItems(visitItems) {
     updateUI(visits, visitItems.length, Reporter.activeTabId);
   }
   else {
-    // alert('Tab id missing:' + Reporter.activeTabId);
-
-    var attemptCompleted = 0;
-    var intervalHandle = setInterval(function getActiveTabId() {
-      chrome.tabs.query({
-        active: true,
-        currentWindow: true
-      },
-      function (tabArray) {
-        ++attemptCompleted;
-          // alert('Attempt ' + attemptCompleted);
-
-        if (tabArray.length > 0 && tabArray[0].id !== null && 
-            tabArray[0].id !== undefined) {
-
-          Reporter.activeTabId = tabArray[0].id;
-          // alert('found: ' + Reporter.activeTabId);
-
-          clearInterval(intervalHandle);
-          updateUI(visits, visitItems.length, Reporter.activeTabId);
-        }
-        if (attemptCompleted > 2) {
-          clearInterval(intervalHandle);
-        }
-      });
-    },
-    500);
+    console.log('Cannot report on visit because activeTabId is not set.');
   }
 }
 
