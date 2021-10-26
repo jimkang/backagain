@@ -2,6 +2,8 @@
 
 This is a browser extension that tells you how many times you've visited the page you're on by updating its button. It also tells you how often how've visited the page across all time when you mouseover the button.
 
+![Screenshot of extension showing bar graph](back-again-screenshot.png)
+
 If you just want to use it on Chrome, [go here](https://extension.google.com/webstore/detail/backagain/kjponlihgeoeeppkmclokpbijdomjmfg) and ignore the rest of this.
 
 ## Installing the extension from source
