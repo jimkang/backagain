@@ -15,6 +15,7 @@ function changeURL(url) {
     // Autorefreshing pages will trigger an onVisited event without being the 
     // active tab.
     var attemptsToGetActiveTab = 0;
+    // Firefox understands the `chrome` namespace.
     var intervalHandle = setInterval(function getActiveTabId() {
       chrome.tabs.query({
         active: true,

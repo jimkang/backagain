@@ -1,6 +1,6 @@
 .DS_Store
-node_modules/
-node.log
-.start_tunnel
-.settings
-db/sprigot.db
+node_modules
+*.swp
+config.js
+config.mk
+demo.js*
